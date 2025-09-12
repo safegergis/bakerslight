@@ -19,7 +19,7 @@ int main() {
     // draw everything here
 
     Player player{};
-    player.setOrigin({50.f, 50.f});
+    // player.setOrigin({100.f, 100.f});
     window.draw(player);
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Right)) {
       player.move({0.1f, 0.f});
