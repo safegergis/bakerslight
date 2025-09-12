@@ -32,10 +32,10 @@ int main() {
 
     // draw everything here
 
-    window.draw(player);
     player.update_pos();
     player.move(player.get_move_vector());
     window.draw(map);
+    window.draw(player);
 
     window.display();
   }
