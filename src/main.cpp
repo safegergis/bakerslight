@@ -35,6 +35,7 @@ int main() {
     window.draw(player);
     player.update_pos();
     player.move(player.get_move_vector());
+    window.draw(map);
 
     window.display();
   }
