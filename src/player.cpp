@@ -34,14 +34,15 @@ void Player::update_pos() {
   this->move_vector = move_direction;
 }
 
+/**
+ * Uses buonding box around player to detect if they've collided with the edges
+ * of the screen
+ */
 bool Player::collision_detected_window(sf::Vector2u window_size) {
-  // auto player_pos = this->getPosition();
-
   sf::FloatRect player_bounds =
       getTransform().transformRect(sprite.getLocalBounds());
 
-  return player_bounds.position.x < 0.0f ||
-         player_bounds.position.y < 0.0f ||
+  return player_bounds.position.x < 0.0f || player_bounds.position.y < 0.0f ||
          player_bounds.position.x + player_bounds.size.x > window_size.x ||
          player_bounds.position.y + player_bounds.size.y > window_size.y;
 }
