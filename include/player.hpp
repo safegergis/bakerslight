@@ -14,10 +14,6 @@ public:
   }
   void draw(sf::RenderTarget &target, sf::RenderStates states) const override {
     states.transform *= getTransform();
-    target.draw(sprite, states);
+    // target.draw(sprite, states);
   }
-
-  void move() override {}
-
-  sf::Vector2f getPosition() const override { return position; }
 };
