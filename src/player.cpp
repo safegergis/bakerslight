@@ -38,7 +38,7 @@ void Player::update_pos() {
  * Uses buonding box around player to detect if they've collided with the edges
  * of the screen
  */
-bool Player::collision_detected_window(sf::Vector2u window_size) {
+bool Player::is_colliding_window(sf::Vector2u window_size) {
   sf::FloatRect player_bounds =
       getTransform().transformRect(sprite.getLocalBounds());
 
