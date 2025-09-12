@@ -3,10 +3,13 @@
 #include <SFML/Graphics/CircleShape.hpp>
 #include <SFML/Window/Keyboard.hpp>
 
+
 int main() {
   auto window =
       sf::RenderWindow(sf::VideoMode({1920u, 1080u}), "CMake SFML Project");
   window.setFramerateLimit(60);
+
+  Player player{};
 
   while (window.isOpen()) {
     while (const std::optional event = window.pollEvent()) {
@@ -18,12 +21,10 @@ int main() {
 
     // draw everything here
 
-    Player player{};
-    player.setOrigin({50.f, 50.f});
     window.draw(player);
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Right)) {
-      player.move({0.1f, 0.f});
-    }
+    player.update_pos();
+    player.move(player.get_move_vector());
+
     window.display();
   }
 }

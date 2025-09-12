@@ -6,7 +6,8 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 include(FetchContent)
 
 set(SOURCES
-    src/main.cpp)
+    src/main.cpp
+    src/player.cpp)
 
 find_package(SFML COMPONENTS Graphics QUIET)
 
@@ -21,7 +22,7 @@ if (NOT SFML_FOUND)
     FetchContent_MakeAvailable(SFML)
 endif()
 
-add_executable(main src/main.cpp)
+add_executable(main ${SOURCES})
 target_compile_features(main PRIVATE cxx_std_17)
 target_include_directories(main PRIVATE include)
 target_link_libraries(main PRIVATE SFML::Graphics)
