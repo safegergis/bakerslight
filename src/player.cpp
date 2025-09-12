@@ -1,3 +1,4 @@
+#include <SFML/Window/Keyboard.hpp>
 #include "player.hpp"
 
 void Player::update_pos() {
