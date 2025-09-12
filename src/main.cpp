@@ -35,7 +35,7 @@ int main() {
 
     player.update_pos();
     player.move(player.get_move_vector());
-    if (player.collision_detected_window(window_size)) {
+    if (player.is_colliding_window(window_size)) {
       player.move(-player.get_move_vector());
     }
     window.draw(map);
