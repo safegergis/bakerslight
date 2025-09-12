@@ -12,7 +12,7 @@ private:
   float radius;
 
 public:
-  Player() : radius(50.0f) {
+  Player() : radius(20.0f) {
     sprite.setRadius(radius);
     sprite.setFillColor(sf::Color(150, 50, 250));
   }
