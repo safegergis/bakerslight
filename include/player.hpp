@@ -9,10 +9,11 @@ class Player : public sf::Drawable, public sf::Transformable {
 private:
   sf::CircleShape sprite;
   sf::Vector2f move_vector;
+  float radius;
 
 public:
-  Player() {
-    sprite.setRadius(50.0f);
+  Player() : radius(50.0f) {
+    sprite.setRadius(radius);
     sprite.setFillColor(sf::Color(150, 50, 250));
   }
   void draw(sf::RenderTarget &target, sf::RenderStates states) const override {
@@ -23,4 +24,6 @@ public:
   void update_pos();
 
   sf::Vector2f get_move_vector() { return move_vector; }
+
+  bool collision_detected(sf::Vector2u window_size);
 };

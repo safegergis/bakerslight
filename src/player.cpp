@@ -1,5 +1,6 @@
-#include <SFML/Window/Keyboard.hpp>
 #include "player.hpp"
+#include <SFML/System/Vector2.hpp>
+#include <SFML/Window/Keyboard.hpp>
 
 void Player::update_pos() {
   using namespace sf::Keyboard;
@@ -30,4 +31,16 @@ void Player::update_pos() {
     move_direction *= speed;
   }
   this->move_vector = move_direction;
+}
+
+bool Player::collision_detected(sf::Vector2u window_size) {
+  auto player_pos = this->getPosition();
+
+  if (player_pos.x < window_size.x &&
+          player_pos.x + this->radius > window_size.x ||
+      player_pos.y < window_size.y &&
+          player_pos.y + this->radius > window_size.y) {
+    return true;
+  }
+  return false;
 }
