@@ -9,7 +9,10 @@ public:
   Player() {
     sprite.setRadius(50.0f);
     sprite.setFillColor(sf::Color(150, 50, 250));
-
   }
-  void draw(sf::RenderTarget) const override {}
+  void draw(sf::RenderTarget& target, sf::RenderStates states) const override
+  {
+    states.transform *= getTransform();
+    target.draw(sprite, states);
+  }
 };

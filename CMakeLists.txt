@@ -5,6 +5,8 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 include(FetchContent)
 
+set(SOURCES
+    src/main.cpp)
 
 find_package(SFML COMPONENTS Graphics QUIET)
 
@@ -21,4 +23,5 @@ endif()
 
 add_executable(main src/main.cpp)
 target_compile_features(main PRIVATE cxx_std_17)
+target_include_directories(main PRIVATE include)
 target_link_libraries(main PRIVATE SFML::Graphics)

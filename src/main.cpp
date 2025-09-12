@@ -1,5 +1,6 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/Graphics/CircleShape.hpp>
+#include "player.hpp"
 
 int main() {
   auto window =
@@ -16,8 +17,7 @@ int main() {
 
     // draw everything here
 
-    sf::CircleShape player(50.0);
-    player.setFillColor(sf::Color(150, 50, 250));
+    Player player{};
     window.draw(player);
     window.display();
   }
