@@ -5,8 +5,9 @@
 #include <SFML/Window/Keyboard.hpp>
 
 int main() {
+  sf::Vector2u window_size = {512, 256};
   auto window =
-      sf::RenderWindow(sf::VideoMode({512, 256}), "CMake SFML Project");
+      sf::RenderWindow(sf::VideoMode(window_size), "CMake SFML Project");
   window.setFramerateLimit(60);
 
   Player player{};
@@ -34,6 +35,9 @@ int main() {
 
     player.update_pos();
     player.move(player.get_move_vector());
+    if (player.collision_detected_window(window_size)) {
+      player.move(-player.get_move_vector());
+    }
     window.draw(map);
     window.draw(player);
 

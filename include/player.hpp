@@ -25,5 +25,5 @@ public:
 
   sf::Vector2f get_move_vector() { return move_vector; }
 
-  bool collision_detected(sf::Vector2u window_size);
+  bool collision_detected_window(sf::Vector2u window_size);
 };

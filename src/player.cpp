@@ -1,4 +1,5 @@
 #include "player.hpp"
+#include <SFML/Graphics/Rect.hpp>
 #include <SFML/System/Vector2.hpp>
 #include <SFML/Window/Keyboard.hpp>
 
@@ -33,14 +34,14 @@ void Player::update_pos() {
   this->move_vector = move_direction;
 }
 
-bool Player::collision_detected(sf::Vector2u window_size) {
-  auto player_pos = this->getPosition();
+bool Player::collision_detected_window(sf::Vector2u window_size) {
+  // auto player_pos = this->getPosition();
 
-  if (player_pos.x < window_size.x &&
-          player_pos.x + this->radius > window_size.x ||
-      player_pos.y < window_size.y &&
-          player_pos.y + this->radius > window_size.y) {
-    return true;
-  }
-  return false;
+  sf::FloatRect player_bounds =
+      getTransform().transformRect(sprite.getLocalBounds());
+
+  return player_bounds.position.x < 0.0f ||
+         player_bounds.position.y < 0.0f ||
+         player_bounds.position.x + player_bounds.size.x > window_size.x ||
+         player_bounds.position.y + player_bounds.size.y > window_size.y;
 }
