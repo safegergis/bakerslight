@@ -6,7 +6,8 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 include(FetchContent)
 
 set(SOURCES
-    src/main.cpp)
+    src/main.cpp
+    src/player.cpp)
 
 find_package(SFML COMPONENTS Graphics QUIET)
 

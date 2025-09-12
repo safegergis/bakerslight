@@ -3,6 +3,7 @@
 #include <SFML/Graphics/CircleShape.hpp>
 #include <SFML/Window/Keyboard.hpp>
 
+
 int main() {
   auto window =
       sf::RenderWindow(sf::VideoMode({1920u, 1080u}), "CMake SFML Project");
@@ -21,38 +22,9 @@ int main() {
     // draw everything here
 
     window.draw(player);
+    player.update_pos();
+    player.move(player.get_move_vector());
 
-    {
-      using namespace sf::Keyboard;
-      float speed_base = 2.0f;
-      float speed_modifier = 1.0f;
-      sf::Vector2f move_direction = {0.0f, 0.0f};
-
-      if (isKeyPressed(Key::RShift) || isKeyPressed(Key::LShift)) {
-        speed_modifier = 2.0f;
-      }
-      float speed = speed_base * speed_modifier;
-
-      if (isKeyPressed(Key::Right) || isKeyPressed(Key::D)) {
-        move_direction.x += 1;
-      }
-      if (isKeyPressed(Key::Left) || isKeyPressed(Key::A)) {
-        move_direction.x -= 1;
-      }
-      if (isKeyPressed(Key::Up) || isKeyPressed(Key::W)) {
-        player.move({0.f, -1.f});
-        move_direction.y -= 1;
-      }
-      if (isKeyPressed(Key::Down) || isKeyPressed(Key::S)) {
-        move_direction.y += 1;
-      }
-
-      if (move_direction.x != 0.0f || move_direction.y != 0.0f) {
-        move_direction = move_direction.normalized();
-        move_direction *= speed;
-        player.move(move_direction);
-      }
-    }
     window.display();
   }
 }

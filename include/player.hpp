@@ -8,7 +8,7 @@
 class Player : public sf::Drawable, public sf::Transformable {
 private:
   sf::CircleShape sprite;
-  sf::Vector2f position;
+  sf::Vector2f move_vector;
 
 public:
   Player() {
@@ -19,4 +19,8 @@ public:
     states.transform *= getTransform();
     target.draw(sprite, states);
   }
+
+  void update_pos();
+
+  sf::Vector2f get_move_vector() { return move_vector; }
 };
