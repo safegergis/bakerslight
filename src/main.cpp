@@ -1,5 +1,7 @@
+#include "player.hpp"
 #include <SFML/Graphics.hpp>
 #include <SFML/Graphics/CircleShape.hpp>
+#include <SFML/Window/Keyboard.hpp>
 
 int main() {
   auto window =
@@ -16,9 +18,12 @@ int main() {
 
     // draw everything here
 
-    sf::CircleShape player(50.0);
-    player.setFillColor(sf::Color(150, 50, 250));
+    Player player{};
+    player.setOrigin({50.f, 50.f});
     window.draw(player);
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Right)) {
+      player.move({0.1f, 0.f});
+    }
     window.display();
   }
 }
