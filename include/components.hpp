@@ -1,48 +1,45 @@
 #pragma once
 #include <SFML/Graphics.hpp>
-#include <memory>
-#include <typeindex>
-#include <unordered_map>
+#include <SFML/Graphics/CircleShape.hpp>
 
-/**
- * Component base
- */
-struct Component {
-  virtual ~Component() = default;
-};
-
-/**
- * Shared components
- */
-struct Transform : Component {
+struct Transform {
   sf::Vector2f position{0.f, 0.f};
   sf::Vector2f scale{1.f, 1.f};
   float rotation = 0.f;
 };
 
-struct Velocity : Component {
-  sf::Vector2f velocity{0.f, 0.f};
-  float maxSpeed = 100.f;
-};
+typedef sf::Vector2f Velocity, Position;
 
-struct Sprite : Component {
-  sf::Texture texture;
-  sf::Sprite *sprite{};
+struct Sprite {
+  sf::CircleShape shape;
+  sf::Color color;
 
-  Sprite(const std::string &texturePath) {
-    if (texture.loadFromFile(texturePath)) {
-      sprite->setTexture(texture);
-    }
+  Sprite(float radius, sf::Color col) : color(col) {
+    shape.setRadius(radius);
+    shape.setFillColor(color);
   }
+  // sf::Texture texture;
+  // sf::Sprite *sprite{};
+
+  // Sprite(const std::string &texturePath) {
+  //   if (texture.loadFromFile(texturePath)) {
+  //     sprite->setTexture(texture);
+  //   }
+  // }
 };
 
-struct Health : Component {
+struct Player {};
+struct Enemy {
+  float detectionRange = 150.f;
+};
+
+struct Health {
   int current = 100;
-  int maximum = 100;
+  int max = 100;
   bool isDead() const { return current <= 0; }
 };
 
-struct Collision : Component {
+struct Collision {
   sf::FloatRect bounds;
   bool solid = true;
 
@@ -51,57 +48,20 @@ struct Collision : Component {
   }
 };
 
-struct PlayerInput : Component {
+struct PlayerInput {
   bool up = false, down = false, left = false, right = false;
   bool attacking = false;
 };
 
 enum class AIType { FollowPlayer, Patrol, Stationary };
 
-struct AI : Component {
+struct AI {
   AIType type = AIType::FollowPlayer;
   sf::Vector2f target{0.f, 0.f};
   float detectionRange = 150.f;
   float attackRange = 50.f;
 };
 
-struct Weapon : Component {
+struct Weapon {
   float damage = 10.f;
 };
-
-class Entity {
-private:
-  static uint32_t nextId;
-  uint32_t id;
-  std::unordered_map<std::type_index, std::unique_ptr<Component>> components;
-
-public:
-  Entity() : id(nextId++) {}
-
-  uint32_t getId() const { return id; }
-
-  template <typename T, typename... Args> T &addComponent(Args &&...args) {
-    auto component = std::make_unique<T>(std::forward<Args>(args)...);
-    T &ref = *component;
-    components[std::type_index(typeid(T))] = std::move(component);
-  }
-
-  template <typename T> T *getComponent() {
-    auto it = components.find(std::type_index(typeid(T)));
-
-    if (it != components.end()) {
-      return static_cast<T *>(it->second.get());
-    }
-    return nullptr;
-  }
-
-  template <typename T> bool hasComponent() const {
-    return components.find(std::type_index(typeid(T))) != components.end();
-  }
-
-  template <typename T> void removeComponent() {
-    components.erase(std::type_index(typeid(T)));
-  }
-};
-
-uint32_t Entity::nextId = 0;
