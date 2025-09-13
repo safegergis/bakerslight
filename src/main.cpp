@@ -3,14 +3,38 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/Graphics/CircleShape.hpp>
 #include <SFML/Window/Keyboard.hpp>
+#include <entt/entt.hpp>
+
+sf::Vector2u window_size = {512, 256};
+
+class Game {
+private:
+  sf::RenderWindow window;
+  entt::registry registry;
+  sf::Clock clock;
+
+public:
+  Game() : window(sf::VideoMode(), "Game") {
+    // createPlayer();
+    // createEnemies();
+  }
+
+  void run() {
+    while (window.isOpen()) {
+      float dt = clock.restart().asSeconds();
+
+      // handleEvents();
+      // update(dt);
+      // render();
+    }
+  }
+};
 
 int main() {
-  sf::Vector2u window_size = {512, 256};
   auto window =
       sf::RenderWindow(sf::VideoMode(window_size), "CMake SFML Project");
   window.setFramerateLimit(60);
 
-  Player player{};
   constexpr std::array level = {
       0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1,
       1, 0, 0, 0, 0, 2, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 3, 3, 3, 3,
@@ -23,6 +47,7 @@ int main() {
   if (!map.load("assets/tiles.png", {16, 16}, level.data(), 9, 9))
     return -1;
 
+  Player player{};
   while (window.isOpen()) {
     while (const std::optional event = window.pollEvent()) {
       if (event->is<sf::Event::Closed>()) {
