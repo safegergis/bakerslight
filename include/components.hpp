@@ -8,7 +8,12 @@ struct Transform {
   float rotation = 0.f;
 };
 
-typedef sf::Vector2f Velocity, Position;
+typedef sf::Vector2f Position;
+
+struct Velocity {
+  float x, y;
+  float maxSpeed = 200.f;
+};
 
 struct Sprite {
   sf::CircleShape shape;
