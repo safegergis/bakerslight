@@ -25,9 +25,9 @@ public:
     while (window.isOpen()) {
       float dt = clock.restart().asSeconds();
 
-      // handleEvents();
-      // update(dt);
-      // render();
+      handleEvents();
+      update(dt);
+      render();
     }
   }
 
@@ -45,19 +45,19 @@ private:
     // TODO
   }
 
-  // void handleEvents() {
+  void handleEvents() {
   //   sf::Event event;
   //   while (window.pollEvent(event)) {
   //     if (event.type == sf::Event::Closed) {
   //       window.close();
   //     }
   //   }
-  // }
+  }
 
   void update(float dt) {
-    // inputSystem(dt);
-    // aiSystem(dt);
-    // movementSystem(dt);
+    inputSystem(dt);
+    aiSystem(dt);
+    movementSystem(dt);
   }
 
   void inputSystem(float dt) {
@@ -103,12 +103,28 @@ private:
       pos.y = std::max(0.f, std::min(pos.y, window_size.y));
     }
   }
+
+  void render() {
+    window.clear(sf::Color::Black);
+
+    auto view = registry.view<Position, Sprite>();
+
+    for (auto entity : view) {
+      auto& pos = view.get<Position>(entity);
+      auto& sprite = view.get<Sprite>(entity);
+
+      sprite.shape.setPosition(pos.x, pos.y);
+      window.draw(sprite.shape);
+    }
+
+    window.display();
+  }
 };
 
 int main() {
-  auto window =
-      sf::RenderWindow(sf::VideoMode(window_size), "CMake SFML Project");
-  window.setFramerateLimit(60);
+  // auto window =
+  //     sf::RenderWindow(sf::VideoMode(window_size), "CMake SFML Project");
+  // window.setFramerateLimit(60);
 
   constexpr std::array level = {
       0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1,
@@ -122,25 +138,28 @@ int main() {
   if (!map.load("assets/tiles.png", {16, 16}, level.data(), 9, 9))
     return -1;
 
-  Player player{};
-  while (window.isOpen()) {
-    while (const std::optional event = window.pollEvent()) {
-      if (event->is<sf::Event::Closed>()) {
-        window.close();
-      }
-    }
-    window.clear();
-
-    // draw everything here
-
-    player.update_pos();
-    player.move(player.get_move_vector());
-    if (player.is_colliding_window(window_size)) {
-      player.move(-player.get_move_vector());
-    }
-    window.draw(map);
-    window.draw(player);
-
-    window.display();
-  }
+  // Player player{};
+  // while (window.isOpen()) {
+  //   while (const std::optional event = window.pollEvent()) {
+  //     if (event->is<sf::Event::Closed>()) {
+  //       window.close();
+  //     }
+  //   }
+  //   window.clear();
+  //
+  //   // draw everything here
+  //
+  //   player.update_pos();
+  //   player.move(player.get_move_vector());
+  //   if (player.is_colliding_window(window_size)) {
+  //     player.move(-player.get_move_vector());
+  //   }
+  //   window.draw(map);
+  //   window.draw(player);
+  //
+  //   window.display();
+  // }
+  Game game;
+  game.run();
+  return 0;
 }
