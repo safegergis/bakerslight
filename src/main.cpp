@@ -1,9 +1,9 @@
-// #include "player.hpp"
 #include "tilemap.hpp"
 #include <SFML/Graphics.hpp>
 #include <SFML/Graphics/CircleShape.hpp>
 #include <SFML/Window/Keyboard.hpp>
 #include <algorithm>
+#include <cmath>
 #include <components.hpp>
 #include <entt/entt.hpp>
 
@@ -14,11 +14,25 @@ private:
   sf::RenderWindow window;
   entt::registry registry;
   sf::Clock clock;
+  Tilemap map;
+  static constexpr std::array<int, 126> level = {
+      0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1,
+      1, 1, 0, 0, 0, 0, 2, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 3, 3,
+      3, 3, 3, 3, 3, 3, 0, 1, 0, 0, 2, 0, 3, 3, 3, 0, 1, 1, 1, 0, 0,
+      0, 0, 1, 1, 0, 3, 3, 3, 0, 0, 0, 1, 1, 1, 2, 0, 0, 0, 0, 1, 0,
+      3, 0, 2, 2, 0, 0, 1, 1, 1, 1, 2, 0, 2, 0, 1, 0, 3, 0, 2, 2, 2,
+      0, 1, 1, 1, 1, 1, 1, 0, 0, 1, 0, 3, 2, 2, 2, 0, 0, 0, 0, 1, 1,
+  };
 
 public:
-  Game() : window(sf::VideoMode(), "Game") {
-    // createPlayer();
+  Game() : window(sf::VideoMode(window_size), "Game") {
+    window.setFramerateLimit(60);
+    createPlayer();
     // createEnemies();
+    if (!map.load("assets/tiles.png", {16, 16}, level.data(), 14, 9)) {
+      // This is not great, but we don't have proper error handling yet
+      window.close();
+    }
   }
 
   void run() {
@@ -46,12 +60,14 @@ private:
   }
 
   void handleEvents() {
-    //   sf::Event event;
-    //   while (window.pollEvent(event)) {
-    //     if (event.type == sf::Event::Closed) {
-    //       window.close();
-    //     }
-    //   }
+    while (const std::optional event = window.pollEvent()) {
+      if (event->is<sf::Event::Closed>() ||
+          (event->is<sf::Event::KeyPressed>() &&
+           event->getIf<sf::Event::KeyPressed>()->code ==
+               sf::Keyboard::Key::Escape)) {
+        window.close();
+      }
+    }
   }
 
   void update(float dt) {
@@ -106,6 +122,7 @@ private:
 
   void render() {
     window.clear(sf::Color::Black);
+    window.draw(map);
 
     auto view = registry.view<Position, Sprite>();
 
@@ -113,7 +130,7 @@ private:
       auto &pos = view.get<Position>(entity);
       auto &sprite = view.get<Sprite>(entity);
 
-      sprite.shape.move({pos.x, pos.y});
+      sprite.shape.setPosition({pos.x, pos.y});
       window.draw(sprite.shape);
     }
 
@@ -122,43 +139,6 @@ private:
 };
 
 int main() {
-  // auto window =
-  //     sf::RenderWindow(sf::VideoMode(window_size), "CMake SFML Project");
-  // window.setFramerateLimit(60);
-
-  constexpr std::array level = {
-      0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1,
-      1, 0, 0, 0, 0, 2, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 3, 3, 3, 3,
-      3, 3, 3, 3, 0, 1, 0, 0, 2, 0, 3, 3, 3, 0, 1, 1, 1, 0, 0, 0, 0, 1,
-      1, 0, 3, 3, 3, 0, 0, 0, 1, 1, 1, 2, 0, 0, 0, 0, 1, 0, 3, 0, 2, 2,
-      0, 0, 1, 1, 1, 1, 2, 0, 2, 0, 1, 0, 3, 0, 2, 2, 2, 0, 1, 1, 1, 1,
-      1, 1, 0, 0, 1, 0, 3, 2, 2, 2, 0, 0, 0, 0, 1, 1, 1, 1,
-  };
-  Tilemap map;
-  if (!map.load("assets/tiles.png", {16, 16}, level.data(), 9, 9))
-    return -1;
-
-  // Player player{};
-  // while (window.isOpen()) {
-  //   while (const std::optional event = window.pollEvent()) {
-  //     if (event->is<sf::Event::Closed>()) {
-  //       window.close();
-  //     }
-  //   }
-  //   window.clear();
-  //
-  //   // draw everything here
-  //
-  //   player.update_pos();
-  //   player.move(player.get_move_vector());
-  //   if (player.is_colliding_window(window_size)) {
-  //     player.move(-player.get_move_vector());
-  //   }
-  //   window.draw(map);
-  //   window.draw(player);
-  //
-  //   window.display();
-  // }
   Game game;
   game.run();
   return 0;

@@ -7,7 +7,7 @@ include(FetchContent)
 
 set(SOURCES
     src/main.cpp
-    src/player.cpp
+    # src/player.cpp
     src/tilemap.cpp)
 
 find_package(SFML COMPONENTS Graphics QUIET)
