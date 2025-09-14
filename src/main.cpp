@@ -27,7 +27,7 @@ public:
   Game() : window(sf::VideoMode(window_size), "Game") {
     window.setFramerateLimit(60);
     createPlayer();
-    // createEnemies();
+    createEnemies();
     if (!map.load("assets/tiles.png", {16, 16}, level.data(), 14, 9)) {
       // This is not great, but we don't have proper error handling yet
       window.close();
