@@ -2,7 +2,6 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/Graphics/CircleShape.hpp>
 #include <SFML/Window/Keyboard.hpp>
-#include <algorithm>
 #include <cmath>
 #include <components.hpp>
 #include <entt/entt.hpp>
