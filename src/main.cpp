@@ -47,7 +47,7 @@ public:
 private:
   void createPlayer() {
     auto player = registry.create();
-    registry.emplace<Position>(player, 400.f, 300.f);
+    registry.emplace<Position>(player, 100.f, 100.f);
     registry.emplace<Velocity>(player, 0.f, 0.f);
     registry.emplace<Sprite>(player, 15.f, sf::Color::Blue);
     registry.emplace<Player>(player);
