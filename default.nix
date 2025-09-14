@@ -19,5 +19,6 @@ mkShell {
     libogg
     flac
     libglvnd
+    entt
   ];
 }
