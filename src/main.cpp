@@ -3,9 +3,9 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/Graphics/CircleShape.hpp>
 #include <SFML/Window/Keyboard.hpp>
-#include <cmath>
 #include <components.hpp>
 #include <entt/entt.hpp>
+#include <algorithm>
 
 sf::Vector2u window_size = {512, 256};
 
@@ -99,8 +99,8 @@ private:
       pos.x += vel.x * dt;
       pos.y += vel.y * dt;
 
-      pos.x = std::max(0.f, std::min(pos.x, window_size.x));
-      pos.y = std::max(0.f, std::min(pos.y, window_size.y));
+      pos.x = std::max(0.f, std::min(pos.x, static_cast<float>(window_size.x)));
+      pos.y = std::max(0.f, std::min(pos.y, static_cast<float>(window_size.y)));
     }
   }
 
