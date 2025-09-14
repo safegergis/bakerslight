@@ -1,8 +1,10 @@
-#include "player.hpp"
+// #include "player.hpp"
 #include "tilemap.hpp"
 #include <SFML/Graphics.hpp>
 #include <SFML/Graphics/CircleShape.hpp>
 #include <SFML/Window/Keyboard.hpp>
+#include <cmath>
+#include <components.hpp>
 #include <entt/entt.hpp>
 
 sf::Vector2u window_size = {512, 256};
@@ -26,6 +28,79 @@ public:
       // handleEvents();
       // update(dt);
       // render();
+    }
+  }
+
+private:
+  void createPlayer() {
+    auto player = registry.create();
+    registry.emplace<Position>(player, 400.f, 300.f);
+    registry.emplace<Velocity>(player, 0.f, 0.f);
+    registry.emplace<Sprite>(player, 15.f, sf::Color::Blue);
+    registry.emplace<Player>(player);
+    registry.emplace<Health>(player, 100, 100);
+  }
+
+  void createEnemies() {
+    // TODO
+  }
+
+  // void handleEvents() {
+  //   sf::Event event;
+  //   while (window.pollEvent(event)) {
+  //     if (event.type == sf::Event::Closed) {
+  //       window.close();
+  //     }
+  //   }
+  // }
+
+  void update(float dt) {
+    // inputSystem(dt);
+    // aiSystem(dt);
+    // movementSystem(dt);
+  }
+
+  void inputSystem(float dt) {
+    auto playerView = registry.view<Player, Velocity>();
+
+    for (auto entity : playerView) {
+      auto &vel = playerView.get<Velocity>(entity);
+
+      // reset velocity
+      vel.x = vel.y = 0.f;
+      if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::W))
+        vel.y -= vel.maxSpeed;
+      if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::S))
+        vel.y += vel.maxSpeed;
+      if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::A))
+        vel.x -= vel.maxSpeed;
+      if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::D))
+        vel.x += vel.maxSpeed;
+
+      // Normalize diagonal movement
+      float magnitude = std::sqrt(vel.x * vel.x + vel.y * vel.y);
+      if (magnitude > vel.maxSpeed) {
+        vel.x = (vel.x / magnitude) * vel.maxSpeed;
+        vel.y = (vel.y / magnitude) * vel.maxSpeed;
+      }
+    }
+  }
+
+  void aiSystem(float dt) {
+    // TODO
+  }
+
+  void movementSystem(float dt) {
+    auto view = registry.view<Position, Velocity>();
+    for (auto entity : view) {
+      auto& pos = view.get<Position>(entity);
+      auto& vel = view.get<Velocity>(entity);
+
+      pos.x += vel.x * dt;
+      pos.y += vel.y * dt;
+
+      pos.x = std::max(0.f, std::min(pos.x, window_size.x));
+      pos.y = std::max(0.f, std::min(pos.y, window_size.y));
     }
   }
 };
