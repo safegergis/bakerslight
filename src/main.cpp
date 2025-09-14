@@ -3,9 +3,9 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/Graphics/CircleShape.hpp>
 #include <SFML/Window/Keyboard.hpp>
+#include <algorithm>
 #include <components.hpp>
 #include <entt/entt.hpp>
-#include <algorithm>
 
 sf::Vector2u window_size = {512, 256};
 
@@ -46,12 +46,12 @@ private:
   }
 
   void handleEvents() {
-  //   sf::Event event;
-  //   while (window.pollEvent(event)) {
-  //     if (event.type == sf::Event::Closed) {
-  //       window.close();
-  //     }
-  //   }
+    //   sf::Event event;
+    //   while (window.pollEvent(event)) {
+    //     if (event.type == sf::Event::Closed) {
+    //       window.close();
+    //     }
+    //   }
   }
 
   void update(float dt) {
@@ -93,8 +93,8 @@ private:
   void movementSystem(float dt) {
     auto view = registry.view<Position, Velocity>();
     for (auto entity : view) {
-      auto& pos = view.get<Position>(entity);
-      auto& vel = view.get<Velocity>(entity);
+      auto &pos = view.get<Position>(entity);
+      auto &vel = view.get<Velocity>(entity);
 
       pos.x += vel.x * dt;
       pos.y += vel.y * dt;
@@ -110,10 +110,10 @@ private:
     auto view = registry.view<Position, Sprite>();
 
     for (auto entity : view) {
-      auto& pos = view.get<Position>(entity);
-      auto& sprite = view.get<Sprite>(entity);
+      auto &pos = view.get<Position>(entity);
+      auto &sprite = view.get<Sprite>(entity);
 
-      sprite.shape.setPosition(pos.x, pos.y);
+      sprite.shape.move({pos.x, pos.y});
       window.draw(sprite.shape);
     }
 
