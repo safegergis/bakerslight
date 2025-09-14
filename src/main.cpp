@@ -55,7 +55,17 @@ private:
   }
 
   void createEnemies() {
-    // TODO
+    for (int i = 0; i < 5; i++) {
+      auto enemy = registry.create();
+      float x = 100.f + (i * 150.f);
+      float y = 100.f + (i % 2) * 400.f;
+
+      registry.emplace<Position>(enemy, x, y);
+      registry.emplace<Velocity>(enemy, 0.f, 0.f);
+      registry.emplace<Sprite>(enemy, 12.f, sf::Color::Red);
+      registry.emplace<Enemy>(enemy, 120.f + i * 20.f); // varying detection ranges
+      registry.emplace<Health>(enemy, 50, 50);
+    }
   }
 
   void handleEvents() {
@@ -102,7 +112,31 @@ private:
   }
 
   void aiSystem(float dt) {
-    // TODO
+    Position playerPos{0, 0};
+    auto playerView = registry.view<Player, Position>();
+    if (playerView.begin() == playerView.end()) return;
+
+    playerPos = playerView.get<Position>(*playerView.begin());
+
+    auto enemyView = registry.view<Enemy, Position, Velocity>();
+
+    for (auto entity : enemyView) {
+      auto& enemy = enemyView.get<Enemy>(entity);
+      auto& pos = enemyView.get<Position>(entity);
+      auto& vel = enemyView.get<Velocity>(entity);
+
+      float dx = playerPos.x - pos.x;
+      float dy = playerPos.y - pos.y;
+      float distance = std::sqrt(dx * dx + dy *dy);
+
+      vel.x = vel.y = 0.f;
+
+      // Chase player within deteection range
+      if (distance > 0 && distance < enemy.detectionRange) {
+      vel.x = (dx / distance) * vel.maxSpeed * 0.8f; // 80% of max speed
+      vel.y = (dy / distance) * vel.maxSpeed * 0.8f;
+      }
+    }
   }
 
   void movementSystem(float dt) {
